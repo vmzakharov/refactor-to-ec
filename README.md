@@ -2,9 +2,9 @@
 
 This project contains examples of refactorings of Java streams to idiomatic Eclipse Collections.
 
-##Refactoring Collections: Making Your Java Streams Leaner, Meaner, and Cleaner
+## Refactoring Collections: Making Your Java Streams Leaner, Meaner, and Cleaner
 
-###Description
+### Description
 
 Looking for ways to optimize your Java applications? Want to see tangible memory savings as well as cleaner, more
 readable code? Want to have better, more natural support for the functional programming paradigm?
