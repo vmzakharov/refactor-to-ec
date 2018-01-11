@@ -1,29 +1,29 @@
-###Slide 1 - Title
+### Slide 1 - Title
 
-###Slide 2 - Introduction
+### Slide 2 - Introduction
 
-###Slide 3 - Any Types You Need
+### Slide 3 - Any Types You Need
 Eclipse Collections offers a tremendous variety of collection types, but you don't have to memorize them all. Just pay 
 attention to the basic building blocks representing different collection types and their aspects.
 
-###Slide 4 - Instantiate Them Using Factories
+### Slide 4 - Instantiate Them Using Factories
 This is similar to Java 9 collection factory methods on List, Set, and Map interfaces, except these methods are a lot 
 more comprehensive
 
-###Slide 5 - Methods [some of] by Category
+### Slide 5 - Methods [some of] by Category
 Rich APIs are available directly on the collection types themselves. 
 
-###Slide 6 - Methods – Lots More…
+### Slide 6 - Methods – Lots More…
 Word sizes in this word cloud are proportional to the number of implementations of the method. There are multiple implementations of key 
 methods on different collection types optimized for those specific types.
 
-###Slide 7 - Why Refactor To EC?
+### Slide 7 - Why Refactor To EC?
 **Performance** - We are pretty sure it will improve in most cases. We have our benchmarks but you really need to run 
 yours.
 
-###Slide 8 - Let's Do It!
+### Slide 8 - Let's Do It!
 
-####Example: Word Count
+#### Example: Word Count
 Starting simple.
 
 Given a text (in this case a nursery rhyme) count the number of occurrences of each word in the text. The result is a 
@@ -35,7 +35,7 @@ is actually fairly readable, but really inefficient. So we will try to optimize 
 Eclipse Collection Bag offers a solution tailor made for this problem and the implementation that is optimized just for 
 this particular collection type.
 
-####Example: Altcoin Report
+#### Example: Altcoin Report
 We want to trade crypto currencies.
 
 Given a list of crypto currencies and their average trading volume, we want to select currencies that show some
@@ -51,7 +51,7 @@ where we are hoping to make the most money.
 
 We print the quote details on the console.
 
-####Example: Zoo
+#### Example: Zoo
 In a zoo we keep animals, who eat different kinds of food. 
 
 We want to answer a few questions about the animals and the food they eat:
@@ -61,6 +61,6 @@ We want to answer a few questions about the animals and the food they eat:
 * Unique foods
 * Types of food
 
-###Slide 9 - JMH Benchmark Results
+### Slide 9 - JMH Benchmark Results
 
-###Slide 10 - Memory Usage Comparison
+### Slide 10 - Memory Usage Comparison
