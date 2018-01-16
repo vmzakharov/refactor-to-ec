@@ -2,11 +2,13 @@ package refactortoec.zoo;
 
 import org.eclipse.collections.api.bag.MutableBag;
 import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.partition.list.PartitionMutableList;
 import org.eclipse.collections.api.set.MutableSet;
 import org.eclipse.collections.api.tuple.primitive.IntIntPair;
 import org.eclipse.collections.impl.collector.Collectors2;
 import org.eclipse.collections.impl.factory.Lists;
 import org.eclipse.collections.impl.factory.Sets;
+import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.HashMap;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @State(Scope.Thread)
@@ -22,18 +25,18 @@ import java.util.stream.Collectors;
 @Fork(2)
 public class ZooBenchmarks
 {
-    private static Food banana = new Food("Banana", FoodType.FRUIT, 50);
-    private static Food apple = new Food("Apple", FoodType.FRUIT, 30);
-    private static Food cake = new Food("Cake", FoodType.DESSERT, 22);
-    private static Food cereal = new Food("Cereal", FoodType.DESSERT, 80);
-    private static Food spinach = new Food("Spinach", FoodType.VEGETABLE, 26);
-    private static Food carrot = new Food("Carrot", FoodType.VEGETABLE, 27);
-    private static Food hamburger = new Food("Hamburger", FoodType.MEAT, 3);
+    private static final Food banana = new Food("Banana", FoodType.FRUIT, 50);
+    private static final Food apple = new Food("Apple", FoodType.FRUIT, 30);
+    private static final Food cake = new Food("Cake", FoodType.DESSERT, 22);
+    private static final Food cereal = new Food("Cereal", FoodType.DESSERT, 80);
+    private static final Food spinach = new Food("Spinach", FoodType.VEGETABLE, 26);
+    private static final Food carrot = new Food("Carrot", FoodType.VEGETABLE, 27);
+    private static final Food hamburger = new Food("Hamburger", FoodType.MEAT, 3);
 
     private static MutableList<Animal> zooAnimals = Lists.mutable.with(
             new Animal("ZigZag", AnimalType.ZEBRA, Lists.mutable.with(banana, apple)),
             new Animal("Tony", AnimalType.TIGER, Lists.mutable.with(cereal, hamburger)),
-            new Animal("Phil", AnimalType.GIRAFFE, Lists.mutable.with(cake)),
+            new Animal("Phil", AnimalType.GIRAFFE, Lists.mutable.with(cake, carrot)),
             new Animal("Lil", AnimalType.GIRAFFE, Lists.mutable.with(spinach)),
             new Animal("Simba", AnimalType.LION, Lists.mutable.with(hamburger)));
 
@@ -98,33 +101,27 @@ public class ZooBenchmarks
     }
 
     @Benchmark
-    public Map<FoodType, Integer> typesOfFoodJdk()
+    public Map<Boolean, List<Animal>> getHerbivoreAnimalsJdk()
     {
-        List<FoodType> foodTypes = zooAnimals.stream()
-                .flatMap(each -> each.getFavoriteFoods().stream())
-                .map(Food::getFoodType)
-                .collect(Collectors.toList());
+        java.util.function.Predicate<Animal> eatsMeat = animal ->
+                animal.getFavoriteFoods().stream().anyMatch(food -> food.getFoodType() == FoodType.MEAT);
 
-        Map<FoodType, Integer> foodTypeCounts = new HashMap<>();
-        for (FoodType foodType : foodTypes)
-        {
-            Integer count = foodTypeCounts.get(foodType);
-            if (count == null)
-            {
-                count = 0;
-            }
-            foodTypeCounts.put(foodType, count + 1);
-        }
-        return foodTypeCounts;
+        Map<Boolean, List<Animal>> meatAndNonMeatEaters = zooAnimals
+                .stream()
+                .collect(Collectors.partitioningBy(eatsMeat));
+        //output = {false=[[ZigZag, ZEBRA], [Phil, GIRAFFE], [Lil, GIRAFFE]], true=[[Tony, TIGER], [Simba, LION]]}
+        return meatAndNonMeatEaters;
     }
 
     @Benchmark
-    public MutableBag<FoodType> typesOfFoodEc()
+    public PartitionMutableList<Animal> getMeatAndNonMeatEatersEc()
     {
-        MutableBag<FoodType> foodTypes = zooAnimals
-                .flatCollect(Animal::getFavoriteFoods)
-                .collect(Food::getFoodType)
-                .toBag();
-        return foodTypes;
+        org.eclipse.collections.api.block.predicate.Predicate<Animal> eatsMeat = animal ->
+                animal.getFavoriteFoods().anySatisfy(food -> food.getFoodType() == FoodType.MEAT);
+
+        PartitionMutableList<Animal> meatAndNonMeatEaters = zooAnimals.partition(eatsMeat);
+        //output = getSelected() = [[Tony, TIGER], [Simba, LION]]
+        //output = getRejected() = [[ZigZag, ZEBRA], [Phil, GIRAFFE], [Lil, GIRAFFE]]
+        return meatAndNonMeatEaters;
     }
 }

@@ -34,4 +34,10 @@ public class Animal
     {
         return this.favoriteFoods.size();
     }
+
+    @Override
+    public String toString()
+    {
+        return "[" + this.name + ", " + this.animalType + "]";
+    }
 }

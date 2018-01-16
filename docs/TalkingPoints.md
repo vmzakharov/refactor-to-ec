@@ -60,6 +60,10 @@ We want to answer a few questions about the animals and the food they eat:
 * List of Animals and the number Of their favorite foods
 * Unique foods
 * Types of food
+* find the meat and non meat eaters
+
+These code snippets have also been tested with the Java Microbenchmark Harness (JMH) framework.
+ We will go through the code examples and then take a look at how they compare.
 
 ### Slide 9 - JMH Benchmark Results
 
