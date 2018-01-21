@@ -1,4 +1,4 @@
-package refactortoec.zoo;
+package refactortoec.benchmarks;
 
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.partition.list.PartitionMutableList;
@@ -8,6 +8,10 @@ import org.eclipse.collections.impl.collector.Collectors2;
 import org.eclipse.collections.impl.factory.Lists;
 import org.eclipse.collections.impl.factory.Sets;
 import org.openjdk.jmh.annotations.*;
+import refactortoec.zoo.Animal;
+import refactortoec.zoo.AnimalType;
+import refactortoec.zoo.Food;
+import refactortoec.zoo.FoodType;
 
 import java.util.List;
 import java.util.Map;
@@ -92,7 +96,7 @@ public class ZooBenchmarks
     public Set<Food> uniqueFoodsEc()
     {
         MutableSet<Food> set = zooAnimals.flatCollect(Animal::getFavoriteFoods, Sets.mutable.empty());
-        MutableSet<Food> set2 = zooAnimals.flatCollect(Animal::getFavoriteFoods).toSet();
+//        MutableSet<Food> set2 = zooAnimals.flatCollect(Animal::getFavoriteFoods).toSet();
         return set;
     }
 
