@@ -1,6 +1,5 @@
-package refactortoec.zoo;
+package refactortoec.benchmarks;
 
-import org.eclipse.collections.api.bag.MutableBag;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.partition.list.PartitionMutableList;
 import org.eclipse.collections.api.set.MutableSet;
@@ -8,15 +7,16 @@ import org.eclipse.collections.api.tuple.primitive.IntIntPair;
 import org.eclipse.collections.impl.collector.Collectors2;
 import org.eclipse.collections.impl.factory.Lists;
 import org.eclipse.collections.impl.factory.Sets;
-import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
+import refactortoec.zoo.Animal;
+import refactortoec.zoo.AnimalType;
+import refactortoec.zoo.Food;
+import refactortoec.zoo.FoodType;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @State(Scope.Thread)
@@ -25,20 +25,20 @@ import java.util.stream.Collectors;
 @Fork(2)
 public class ZooBenchmarks
 {
-    private static final Food banana = new Food("Banana", FoodType.FRUIT, 50);
-    private static final Food apple = new Food("Apple", FoodType.FRUIT, 30);
-    private static final Food cake = new Food("Cake", FoodType.DESSERT, 22);
-    private static final Food cereal = new Food("Cereal", FoodType.DESSERT, 80);
-    private static final Food spinach = new Food("Spinach", FoodType.VEGETABLE, 26);
-    private static final Food carrot = new Food("Carrot", FoodType.VEGETABLE, 27);
-    private static final Food hamburger = new Food("Hamburger", FoodType.MEAT, 3);
+    private static final Food BANANA = new Food("Banana", FoodType.FRUIT, 50);
+    private static final Food APPLE = new Food("Apple", FoodType.FRUIT, 30);
+    private static final Food CAKE = new Food("Cake", FoodType.DESSERT, 22);
+    private static final Food CEREAL = new Food("Cereal", FoodType.DESSERT, 80);
+    private static final Food SPINACH = new Food("Spinach", FoodType.VEGETABLE, 26);
+    private static final Food CARROT = new Food("Carrot", FoodType.VEGETABLE, 27);
+    private static final Food HAMBURGER = new Food("Hamburger", FoodType.MEAT, 3);
 
     private static MutableList<Animal> zooAnimals = Lists.mutable.with(
-            new Animal("ZigZag", AnimalType.ZEBRA, Lists.mutable.with(banana, apple)),
-            new Animal("Tony", AnimalType.TIGER, Lists.mutable.with(cereal, hamburger)),
-            new Animal("Phil", AnimalType.GIRAFFE, Lists.mutable.with(cake, carrot)),
-            new Animal("Lil", AnimalType.GIRAFFE, Lists.mutable.with(spinach)),
-            new Animal("Simba", AnimalType.LION, Lists.mutable.with(hamburger)));
+            new Animal("ZigZag", AnimalType.ZEBRA, Lists.mutable.with(BANANA, APPLE)),
+            new Animal("Tony", AnimalType.TIGER, Lists.mutable.with(CEREAL, HAMBURGER)),
+            new Animal("Phil", AnimalType.GIRAFFE, Lists.mutable.with(CAKE, CARROT)),
+            new Animal("Lil", AnimalType.GIRAFFE, Lists.mutable.with(SPINACH)),
+            new Animal("Simba", AnimalType.LION, Lists.mutable.with(HAMBURGER)));
 
     @Benchmark
     public List<Map.Entry<Integer, Long>> highestQuantityFoodJdk()
@@ -96,7 +96,7 @@ public class ZooBenchmarks
     public Set<Food> uniqueFoodsEc()
     {
         MutableSet<Food> set = zooAnimals.flatCollect(Animal::getFavoriteFoods, Sets.mutable.empty());
-        MutableSet<Food> set2 = zooAnimals.flatCollect(Animal::getFavoriteFoods).toSet();
+//        MutableSet<Food> set2 = zooAnimals.flatCollect(Animal::getFavoriteFoods).toSet();
         return set;
     }
 
