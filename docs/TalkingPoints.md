@@ -64,6 +64,32 @@ We want to answer a few questions about the animals and the food they eat:
 
 These code snippets have also been tested with the Java Microbenchmark Harness (JMH) framework.
  We will go through the code examples and then take a look at how they compare.
+ 
+Ex. 1 - Most popular food item
+How in demand are our different food options? We need to keep track of what is being eaten the most.
+
+Ex 2 - number of favorite food items to animal
+How diverse is each animal's food choice? How many animals eat just one thing? How many eat two?
+
+Ex 3 - unique foods
+How many different types of food do we have? What are they?
+- discuss target collections
+
+Ex 4 - meat and non meat eaters
+How many meat eaters do we have? How many non meat eaters?
+
+Latest benchmark results:
+Benchmark                                                  Mode  Cnt         Score        Error  Units
+ZooBenchmarks.getMeatAndNonMeatEatersEc                   thrpt   40  10954950.120 ± 307316.411  ops/s
+ZooBenchmarks.getMeatAndNonMeatEatersJdk                  thrpt   40   1950009.366 ±  45231.808  ops/s
+ZooBenchmarks.mostPopularFoodItemEc                       thrpt   40   2258615.801 ± 126587.974  ops/s
+ZooBenchmarks.mostPopularFoodItemJdk                      thrpt   40    859913.369 ±  26398.501  ops/s
+ZooBenchmarks.printNumberOfFavoriteFoodItemsToAnimalsEc   thrpt   40   1044445.447 ±  29083.819  ops/s
+ZooBenchmarks.printNumberOfFavoriteFoodItemsToAnimalsJdk  thrpt   40    867522.768 ±  67087.502  ops/s
+ZooBenchmarks.uniqueFoodsEcWithTargetCollection           thrpt   40   6774968.971 ± 140500.361  ops/s
+ZooBenchmarks.uniqueFoodsEcWithoutTargetCollection        thrpt   40   2535652.652 ±  67373.182  ops/s
+ZooBenchmarks.uniqueFoodsJdk                              thrpt   40   2165134.848 ± 103500.261  ops/s
+
 
 ### Slide 9 - JMH Benchmark Results
 

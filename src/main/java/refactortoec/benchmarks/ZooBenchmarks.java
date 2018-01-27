@@ -2,8 +2,7 @@ package refactortoec.benchmarks;
 
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.partition.list.PartitionMutableList;
-import org.eclipse.collections.api.set.MutableSet;
-import org.eclipse.collections.api.tuple.primitive.IntIntPair;
+import org.eclipse.collections.api.tuple.primitive.ObjectIntPair;
 import org.eclipse.collections.impl.collector.Collectors2;
 import org.eclipse.collections.impl.factory.Lists;
 import org.eclipse.collections.impl.factory.Sets;
@@ -17,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @State(Scope.Thread)
@@ -41,31 +41,34 @@ public class ZooBenchmarks
             new Animal("Simba", AnimalType.LION, Lists.mutable.with(HAMBURGER)));
 
     @Benchmark
-    public List<Map.Entry<Integer, Long>> highestQuantityFoodJdk()
+    public List<Map.Entry<Food, Long>> mostPopularFoodItemJdk()
     {
+        //output: [Hamburger=2]
         return zooAnimals.stream()
                 .flatMap(animals -> animals.getFavoriteFoods().stream())
-                .collect(Collectors.groupingBy(Food::getQuantity, Collectors.counting()))
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                 .entrySet()
                 .stream()
-                .sorted(Map.Entry.<Integer, Long>comparingByValue().reversed())
+                .sorted(Map.Entry.<Food, Long>comparingByValue().reversed())
                 .limit(1)
                 .collect(Collectors.toList());
     }
 
     @Benchmark
-    public MutableList<IntIntPair> highestQuantityFoodEc()
+    public MutableList<ObjectIntPair<Food>> mostPopularFoodItemEc()
     {
-        return zooAnimals.asLazy()
+        //output: [Hamburger:2]
+        MutableList<ObjectIntPair<Food>> intIntPairs = zooAnimals.asLazy()
                 .flatCollect(Animal::getFavoriteFoods)
-                .collectInt(Food::getQuantity)
                 .toBag()
                 .topOccurrences(1);
+        return intIntPairs;
     }
 
     @Benchmark
-    public Map<Integer, String> printAnimalsToNumberOfFavoriteFoodsJdk()
+    public Map<Integer, String> printNumberOfFavoriteFoodItemsToAnimalsJdk()
     {
+        //output: {1=[Lil, GIRAFFE],[Simba, LION], 2=[ZigZag, ZEBRA],[Tony, TIGER],[Phil, GIRAFFE]}
         return zooAnimals.stream()
                 .collect(Collectors.groupingBy(
                         Animal::getNumberOfFavoriteFoods,
@@ -75,8 +78,9 @@ public class ZooBenchmarks
     }
 
     @Benchmark
-    public Map<Integer, String> printAnimalsToNumberOfFavoriteFoodsEc()
+    public Map<Integer, String> printNumberOfFavoriteFoodItemsToAnimalsEc()
     {
+        //output: {1=[Lil, GIRAFFE], [Simba, LION], 2=[ZigZag, ZEBRA], [Tony, TIGER], [Phil, GIRAFFE]}
         return zooAnimals
                 .stream()
                 .collect(Collectors.groupingBy(
@@ -93,15 +97,19 @@ public class ZooBenchmarks
     }
 
     @Benchmark
-    public Set<Food> uniqueFoodsEc()
+    public Set<Food> uniqueFoodsEcWithTargetCollection()
     {
-        MutableSet<Food> set = zooAnimals.flatCollect(Animal::getFavoriteFoods, Sets.mutable.empty());
-//        MutableSet<Food> set2 = zooAnimals.flatCollect(Animal::getFavoriteFoods).toSet();
-        return set;
+        return zooAnimals.flatCollect(Animal::getFavoriteFoods, Sets.mutable.empty());
     }
 
     @Benchmark
-    public Map<Boolean, List<Animal>> getHerbivoreAnimalsJdk()
+    public Set<Food> uniqueFoodsEcWithoutTargetCollection()
+    {
+        return zooAnimals.flatCollect(Animal::getFavoriteFoods).toSet();
+    }
+
+    @Benchmark
+    public Map<Boolean, List<Animal>> getMeatAndNonMeatEatersJdk()
     {
         java.util.function.Predicate<Animal> eatsMeat = animal ->
                 animal.getFavoriteFoods().stream().anyMatch(food -> food.getFoodType() == FoodType.MEAT);

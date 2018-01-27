@@ -27,4 +27,10 @@ public class Food
     {
         return this.quantity;
     }
+
+    @Override
+    public String toString()
+    {
+        return this.name;
+    }
 }
