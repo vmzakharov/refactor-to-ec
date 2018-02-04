@@ -1,12 +1,12 @@
 package refactortoec.coin;
 
-public class Altcoin
+public class CryptoCcy
 {
     private final String name;
     private final String symbol;
     private final double avgDailyVolume;
 
-    public Altcoin(String newName, String newSymbol, double newAvgDailyVolume)
+    public CryptoCcy(String newName, String newSymbol, double newAvgDailyVolume)
     {
         this.name = newName;
         this.symbol = newSymbol;

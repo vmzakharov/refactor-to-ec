@@ -5,6 +5,7 @@ import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.impl.block.factory.Comparators;
 import org.eclipse.collections.impl.factory.Lists;
+import org.eclipse.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -15,26 +16,26 @@ import java.util.stream.Collectors;
 
 public class CoinSortingTest
 {
-    private static ListIterable<Altcoin> altcoinsAsListIterable;
-    private static List<Altcoin> altcoinsAsJdkList;
+    private static ListIterable<CryptoCcy> cryptoCcyAsListIterable;
+    private static List<CryptoCcy> cryptoCcyAsJdkList;
     private static MutableMap<String, CoinPriceQuote> quotesBySymbol;
 
     @BeforeClass
     public static void loadData()
     {
-        altcoinsAsListIterable = Lists.mutable.of(
-                new Altcoin("Bitcoin", "BTC", 1_300_000), // 17_000 +1%
-                new Altcoin("Dogecoin",    "DOGE", 20_000), // 0.015 +40%
-                new Altcoin("Ethereum",    "ETH", 300_000), // 1000 + 3%
-                new Altcoin("Ripple",      "XRP", 200_000), // 3 -5%
-                new Altcoin("Litecoin",    "LTC", 135_000), // 300 +20#
-                new Altcoin("Einsteinium", "EMC2", 850), // 1 +2%
-                new Altcoin("IOTA",        "MIOTA", 9_500), // 4 -10%
-                new Altcoin("Selfiecoin",  "SLFI", 0.01), // 0.0002 +2%
-                new Altcoin("Dreamcoin",   "DRM", 0.000001) // 0.05 -10%
+        cryptoCcyAsListIterable = Lists.mutable.of(
+                new CryptoCcy("Bitcoin", "BTC", 1_300_000), // 17_000 +1%
+                new CryptoCcy("Dogecoin", "DOGE", 20_000), // 0.015 +40%
+                new CryptoCcy("Ethereum", "ETH", 300_000), // 1000 + 3%
+                new CryptoCcy("Ripple", "XRP", 200_000), // 3 -5%
+                new CryptoCcy("Litecoin", "LTC", 135_000), // 300 +20#
+                new CryptoCcy("Einsteinium", "EMC2", 850), // 1 +2%
+                new CryptoCcy("IOTA", "MIOTA", 9_500), // 4 -10%
+                new CryptoCcy("Selfiecoin", "SLFI", 0.01), // 0.0002 +2%
+                new CryptoCcy("Dreamcoin", "DRM", 0.000001) // 0.05 -10%
         );
 
-        altcoinsAsJdkList = (List<Altcoin>) altcoinsAsListIterable;
+        cryptoCcyAsJdkList = (List<CryptoCcy>) cryptoCcyAsListIterable;
 
         ListIterable<CoinPriceQuote> quotes = Lists.immutable.of(
                 new CoinPriceQuote("BTC",  17_000.0,    1.0),
@@ -50,22 +51,22 @@ public class CoinSortingTest
         quotesBySymbol = quotes.toMap(CoinPriceQuote::getSymbol, quote -> quote);
     }
 
-    public static ListIterable<Altcoin> getAltcoinsAsListIterable()
+    public static ListIterable<CryptoCcy> getCryptoCcyAsListIterable()
     {
-        return altcoinsAsListIterable;
+        return cryptoCcyAsListIterable;
     }
 
-    public static List<Altcoin> getAltcoinsAsJdkList()
+    public static List<CryptoCcy> getCryptoCcyAsJdkList()
     {
-        return altcoinsAsJdkList;
+        return cryptoCcyAsJdkList;
     }
 
     @Test
     public void filerCoinsJdk()
     {
-        List<CoinPriceQuote> interestingCoins = getAltcoinsAsJdkList()
+        List<CoinPriceQuote> interestingCoins = getCryptoCcyAsJdkList()
                 .stream()
-                .filter(altcoin -> altcoin.getAvgDailyVolume() > 1)
+                .filter(cryptoCcy -> cryptoCcy.getAvgDailyVolume() > 1)
                 .map(this::getPriceQuote)
                 .sorted(Comparator.comparingDouble(CoinPriceQuote::getAbsPercentChange).reversed())
                 .limit(4)
@@ -86,22 +87,21 @@ public class CoinSortingTest
     @Test
     public void filerCoinsEc()
     {
-        MutableList<CoinPriceQuote> interestingCoins = getAltcoinsAsListIterable()
-                .select(altcoin -> altcoin.getAvgDailyVolume() > 1)
+        MutableList<CoinPriceQuote> interestingCoins = getCryptoCcyAsListIterable()
+                .select(cryptoCcy -> cryptoCcy.getAvgDailyVolume() > 1)
                 .collect(this::getPriceQuote)
                 .toSortedList(Comparators.byDoubleFunction(CoinPriceQuote::getAbsPercentChange).reversed())
                 .take(4);
 
         System.out.println(interestingCoins.makeString("EC\n", "\n", "\n-----"));
 
-        Assert.assertArrayEquals(new String[] {"DOGE", "LTC", "MIOTA", "XRP"},
-                                 interestingCoins.collect(CoinPriceQuote::getSymbol).toArray());
-//        Verify.assertArrayEquals(new String[] {"DOGE", "LTC", "MIOTA", "XRP"},
-//                                 interestingCoins.collect(CoinPriceQuote::getSymbol).toArray());
+        Verify.assertIterablesEqual(
+                Lists.immutable.of("DOGE", "LTC", "MIOTA", "XRP"),
+                interestingCoins.collect(CoinPriceQuote::getSymbol));
     }
 
-    private CoinPriceQuote getPriceQuote(Altcoin altcoin)
+    private CoinPriceQuote getPriceQuote(CryptoCcy cryptoCcy)
     {
-        return quotesBySymbol.get(altcoin.getSymbol());
+        return quotesBySymbol.get(cryptoCcy.getSymbol());
     }
 }
