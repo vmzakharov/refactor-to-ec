@@ -3,13 +3,13 @@ package refactortoec.coin;
 public class CoinPriceQuote
 {
     private String symbol;
-    private double pirceUsd;
+    private double priceUsd;
     private double percentChange;
 
-    public CoinPriceQuote(String newSymbol, double newPirceUsd, double newPercentChange)
+    public CoinPriceQuote(String newSymbol, double newPriceUsd, double newPercentChange)
     {
         this.symbol = newSymbol;
-        this.pirceUsd = newPirceUsd;
+        this.priceUsd = newPriceUsd;
         this.percentChange = newPercentChange;
     }
 
@@ -18,9 +18,9 @@ public class CoinPriceQuote
         return this.symbol;
     }
 
-    public double getPirceUsd()
+    public double getPriceUsd()
     {
-        return this.pirceUsd;
+        return this.priceUsd;
     }
 
     public double getPercentChange()
@@ -36,6 +36,6 @@ public class CoinPriceQuote
     @Override
     public String toString()
     {
-        return String.format("%8s %,12.4f USD %,8.2f%%", this.symbol, this.pirceUsd, this.percentChange);
+        return String.format("%8s %,12.4f USD %,8.2f%%", this.symbol, this.priceUsd, this.percentChange);
     }
 }
