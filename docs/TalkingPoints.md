@@ -1,25 +1,96 @@
 ### Slide 1 - Title
+Today we'll see how Eclipse Collections can help you optimize your Java code. Optimize not
+just from the point of view of memory or performance, but also by making your code cleaner 
+and easier to understand.
+
+The main part of this talk is a live demo where we will see how to change the code that 
+uses the standard Java collections and streams to code that uses Eclipse Collection 
+framework. But before we dive into the code, we'll spend a few minutes to understand 
+what EC is, why it is needed, and why you might want to rewrite a working idiomatic Java 
+code to code using EC.
 
 ### Slide 2 - Introduction
+Eclipse Collections is, in my opinion, the best collection library for Java, compatible 
+with the collections that you get from the JDK.
 
-### Slide 3 - Any Types You Need
-Eclipse Collections offers a tremendous variety of collection types, but you don't have to memorize them all. Just pay 
-attention to the basic building blocks representing different collection types and their aspects.
+Where did it all come from? EC was created at Goldman Sachs, initially for an application with a
+very large cache component. The system stores hundreds of gigabytes of data in memory.
+What is a cache? In fact a cache is simply a map, we write down objects there and get them 
+out. And these objects can contain other maps, and lists of objects and so on. Initially, 
+the cache was based on the standard collections from the package java.util. *. But it quickly 
+became apparent that these collections have two significant drawbacks: inefficient use of 
+memory, and very limited interfaces. It was not possible to patch it with utility libraries,
+so to kill two birds with one stone a decision was made to rewrite it from scratch.
+ 
+It was of course a somewhat radical solution, but it worked. Now this framework is under 
+the umbrella of Eclipse Foundation.
 
-### Slide 4 - Instantiate Them Using Factories
+On this slide you see the links to sites that will help you learn more about the project 
+itself and ways to leard EC and contribute to it.
+
+### Slide 3 - Why Refactor To EC?
+So what are the benefits of EC? Why would you want to rewrite a good working piece of code 
+already written in Java to idiomatic EC?
+
+Before we talk directly about the benefits, it's important to note that moving to the EC 
+is easy, and you don't have to do it all at once. Eclipse Collections includes fully 
+compatible with JDK java.util. * implementations of List, Set and Map interfaces and is 
+compatible with libraries from JDK, for example, Collectors.
+
+But these familiar types in the EC have much richer interfaces. There are also additional 
+types that are not in JDK, such as Bag, Multimap and BiMap. BiMap is an "inverted" map, 
+you can find the key by value. Multimap - dictionaries with non-unique keys or multiple 
+values for the same key. And a Bag is a multiset, a set with repeating elements.
+
+Eclipse Collections also contains a complete collection of primitive types.
+
+For each collection there is an immutable equivalent, which allows you to write a more 
+secure code, where errors are caught by the compiler.
+
+In the course of this demonstration, you will see how the code, which is written using a 
+standard approach, is transformed to Eclipse Collections' types and methods, and how this 
+in turn will lead to significant memory savings. And depending on your particular scenario, 
+it may also lead to improved performance.
+
+Eclipse Collections allows you to easily switch from lazy to eager implementation of 
+collections and back, which greatly helps writing, understanding and debugging of 
+functional code in Java.
+
+Immutable collections allow you to develop more correct code, without changing the state 
+of the contents of collections. The correctness of the program in this case will be 
+guaranteed by the compiler, which will avoid surprises during its execution. 
+The combination of immutable collections and richer interfaces will allow you to write 
+pure functional code in Java.
+
+What are bun methods? This is an analogy, which was invented by Brian Goetz, chief architect 
+of Java at Oracle. If you want meat, but you are given a hamburger, then there is a meat patty
+between the two buts. These buns are empty calories, which you do not really need. Same with 
+Java streams: if you want to do something, does not matter what, of course you need the methods that 
+do what you actually want. But you also need to put these methods between two buns - the 
+stream (or parallelStream) method at the beginning and the collector at the end. In EC these 
+methods are not required.
+
+### Slide 4 - Any Types You Need
+In the EC there are types and methods for every need and they are easy to find by 
+the features you require. So it is not necessary to memorize their individual names. 
+Do you need a collection that is mutable or immutable? Sorted? What type of data do we 
+want to store in the collection? All primitive types are supported. And finally, what kind 
+of collection do you need? We can make these collections lazy or eager. In Java, streams 
+are only lazy. We can also make collections parallel.
+
+So do not memorize individual type names, just remember the the basic building blocks 
+representing different collection types and their aspects.
+
+### Slide 5 - Instantiate Them Using Factories
 This is similar to Java 9 collection factory methods on List, Set, and Map interfaces, except these methods are a lot 
 more comprehensive
 
-### Slide 5 - Methods [some of] by Category
+### Slide 6 - Methods [some of] by Category
 Rich APIs are available directly on the collection types themselves. 
 
-### Slide 6 - Methods – Lots More…
+### Slide 7 - Methods – Lots More…
 Word sizes in this word cloud are proportional to the number of implementations of the method. There are multiple implementations of key 
 methods on different collection types optimized for those specific types.
-
-### Slide 7 - Why Refactor To EC?
-**Performance** - We are pretty sure it will improve in most cases. We have our benchmarks but you really need to run 
-yours.
 
 ### Slide 8 - Let's Do It!
 
