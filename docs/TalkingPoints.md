@@ -80,16 +80,15 @@ How many meat eaters do we have? How many non meat eaters?
 
 Latest benchmark results:
 Benchmark                                                  Mode  Cnt         Score        Error  Units
-ZooBenchmarks.getMeatAndNonMeatEatersEc                   thrpt   40  10954950.120 ± 307316.411  ops/s
-ZooBenchmarks.getMeatAndNonMeatEatersJdk                  thrpt   40   1950009.366 ±  45231.808  ops/s
-ZooBenchmarks.mostPopularFoodItemEc                       thrpt   40   2258615.801 ± 126587.974  ops/s
-ZooBenchmarks.mostPopularFoodItemJdk                      thrpt   40    859913.369 ±  26398.501  ops/s
-ZooBenchmarks.printNumberOfFavoriteFoodItemsToAnimalsEc   thrpt   40   1044445.447 ±  29083.819  ops/s
-ZooBenchmarks.printNumberOfFavoriteFoodItemsToAnimalsJdk  thrpt   40    867522.768 ±  67087.502  ops/s
-ZooBenchmarks.uniqueFoodsEcWithTargetCollection           thrpt   40   6774968.971 ± 140500.361  ops/s
-ZooBenchmarks.uniqueFoodsEcWithoutTargetCollection        thrpt   40   2535652.652 ±  67373.182  ops/s
-ZooBenchmarks.uniqueFoodsJdk                              thrpt   40   2165134.848 ± 103500.261  ops/s
-
+ZooBenchmarks.getMeatAndNonMeatEatersEc                   thrpt   40  15404986.588 ± 308084.554  ops/s
+ZooBenchmarks.getMeatAndNonMeatEatersJdk                  thrpt   40   2293012.428 ±  23878.929  ops/s
+ZooBenchmarks.mostPopularFoodItemEc                       thrpt   40   2983891.901 ±  33548.931  ops/s
+ZooBenchmarks.mostPopularFoodItemJdk                      thrpt   40   1222743.182 ±   7744.237  ops/s
+ZooBenchmarks.printNumberOfFavoriteFoodItemsToAnimalsEc   thrpt   40   1431644.010 ±  17279.903  ops/s
+ZooBenchmarks.printNumberOfFavoriteFoodItemsToAnimalsJdk  thrpt   40   1347812.173 ±   8287.517  ops/s
+ZooBenchmarks.uniqueFoodsEcWithTargetCollection           thrpt   40   9077488.911 ±  93978.941  ops/s
+ZooBenchmarks.uniqueFoodsEcWithoutTargetCollection        thrpt   40   3558312.000 ±  26025.030  ops/s
+ZooBenchmarks.uniqueFoodsJdk                              thrpt   40   2770848.646 ±  23794.867  ops/s
 
 ### Slide 9 - JMH Benchmark Results
 
