@@ -161,6 +161,50 @@ ZooBenchmarks.uniqueFoodsEcWithTargetCollection           thrpt   40   9077488.9
 ZooBenchmarks.uniqueFoodsEcWithoutTargetCollection        thrpt   40   3558312.000 ±  26025.030  ops/s
 ZooBenchmarks.uniqueFoodsJdk                              thrpt   40   2770848.646 ±  23794.867  ops/s
 
-### Slide 9 - JMH Benchmark Results
+### Slide 9 - Memory Usage Comparison
 
-### Slide 10 - Memory Usage Comparison
+In the examples that we covered, the main focus was on the types and interfaces of the collections. 
+I mentioned before that the transition to the EC will also allow you to optimize memory usage. The effect 
+can be quite significant. It depends on whether the collections in your particular application are used 
+extensively and what type of collections they are.
+
+On the graphs, you see memory usage comparison between EC and collections from java.util. *
+
+The memory on the graph is the allocated memory minus the collection payload (so we show only the 
+memory that the data structures themselves occupy). The value we measure is simply 
+totalMemory () - freeMemory (), after we politely ask System.gc(). The results we observe are 
+stable and coincide with the results obtained with the same examples in Java 8 using 
+jdk.nashorn.internal.ir.debug.ObjectSizeCalculator from the Nashorn project. This utility measures the 
+size precisely, but it unfortunately is not compatible with Java 9.
+
+The first graph shows the advantage of a primitive list of int values ​​(integers) from EC, compared 
+to a list of JDK Integer values. The graph shows that for one million values, the implementation of 
+a list from java.util.* will use more than 15 megabytes more memory.
+
+Maps in Java are extremely inefficient, and require a Map.Entry object, which inflates memory 
+usage.
+
+But if maps are not memory efficient, then sets are simply awful. Set uses Map, which just 
+wasteful. Map.Entry there is completely pointless, since it uses only one value - the key. 
+Therefore, you see that set and map in Java use the same amount of memory, although a set can be made 
+much more compact. Which is done in the EC. Set uses much less memory than Map in the EC to say nothing 
+about how how much more efficient Set in EC is in comparison with java.util. *
+
+And finally, the fourth graph shows the advantages of specialized collection types. A Bag is a set 
+with repeating elements. You Use it if you need, say, to calculate how many times each element occurs. In 
+java.util. * An equivalent data structure is a map with keys - set elements and values ​​that 
+store numbers for their calculation. Again, look at how much the specialized data structure has been 
+optimized.
+
+Of course, I recommend checking this in each individual case. If you replace the standard Java collections 
+with the EC, you will get these results, that's for sure, but they can have a big impact on the overall 
+use of your program's memory or not. It all depends on the specific circumstances.
+
+### Slide 10 - JMH Benchmark Results
+On this slide, we compare execution speed of the examples we covered before. We compare the performance of the 
+code before rewriting it to the EC and after. As you see, the speed up is obvious.
+
+But, I want to emphasize that, in contrast to memory usage, these results that you see are only applicable 
+to our specific examples. Whether your code is much faster, or maybe even slower, depends very much on 
+your particular situation, so be sure to test it against the real scenarios that make sense for your 
+application.
